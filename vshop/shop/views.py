@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.views.generic import View
 from .settings.base import *
 from django.core.paginator import Paginator
+from .models import *
 
 from django.http import HttpResponse
 import json
@@ -79,32 +80,37 @@ class ShopView(View):
 class WishlistView(View):
    
     def get(self, request):
-        food = [
-            {'title': 'Bell Pepper',
-             'img': 'images/product-1.jpg',
-             'description': 'Far far away, behind the word mountains, far from the countries',
-             'currency': '$',
-             'price': 80.00,
-             'quantity': 1,
-             'total_price': 80.00
-             },
-            {'title': 'Stawberry',
-             'img': 'images/product-2.jpg',
-             'description': 'Far far away, behind the word mountains, far from the countries',
-             'currency': '$',
-             'price': 120.00,
-             'quantity': 1,
-             'total_price': 120.00
-             },
-            {'title': 'Green beans',
-             'img': 'images/product-3.jpg',
-             'description': 'Far far away, behind the word mountains, far from the countries',
-             'currency': '$',
-             'price': 20.00,
-             'quantity': 1,
-             'total_price': 20.00
-             },
-        ]
+        # food = [
+        #     {'title': 'Bell Pepper',
+        #      'img': 'images/product-1.jpg',
+        #      'description': 'Far far away, behind the word mountains, far from the countries',
+        #      'currency': '$',
+        #      'price': 80.00,
+        #      'quantity': 1,
+        #      'total_price': 80.00
+        #      },
+        #     {'title': 'Stawberry',
+        #      'img': 'images/product-2.jpg',
+        #      'description': 'Far far away, behind the word mountains, far from the countries',
+        #      'currency': '$',
+        #      'price': 120.00,
+        #      'quantity': 1,
+        #      'total_price': 120.00
+        #      },
+        #     {'title': 'Green beans',
+        #      'img': 'images/product-3.jpg',
+        #      'description': 'Far far away, behind the word mountains, far from the countries',
+        #      'currency': '$',
+        #      'price': 20.00,
+        #      'quantity': 1,
+        #      'total_price': 20.00
+        #      },
+        # ]
+
+        product_query = Product.objects.all().values()
+        print(product_query)
+
+        food = list(product_query)
 
         if not request.is_ajax():
             return render(request, 'shop/wishlist.html', {'phone_number': PHONE_NUMBER})
