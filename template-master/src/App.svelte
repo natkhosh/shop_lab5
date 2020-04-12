@@ -2,90 +2,27 @@
 
     import { onMount, onDestroy } from 'svelte';
     import Cookies from 'js-cookie/src/js.cookie.js'
-    
-   let food = [
-		{ title:       'Bell Pepper',
-          img:         'images/product-1.jpg', 
-          description: 'Far far away, behind the word mountains, far from the countries',
-          currency:    '$',
-          price:       80.00,
-          quantity:     1,
-          total_price: 80.00
-          },
-        { title:       'Stawberry',
-          img:         'images/product-2.jpg', 
-          description: 'Far far away, behind the word mountains, far from the countries',
-          currency:    '$',
-          price:       120.00,
-          quantity:     1,
-          total_price: 120.00
-          },
-        { title:       'Green beans',
-          img:         'images/product-3.jpg', 
-          description: 'Far far away, behind the word mountains, far from the countries',
-          currency:    '$',
-          price:       20.00,
-          quantity:     1,
-          total_price: 20.00
-          },          
-	];
-    
-    function onInterval(callback, ms) {
-        const interval = setInterval(callback, ms);
-        
-        onDestroy(() => {
-            clearInterval(interval);
-        });    
-    }
-    
-    function getRef(id) {return document.getElementById(id).href;};    
 
-    
-    const IMG_GEN_URL = getRef('picsum-ref');
-   
-    var count = 0;
-    onInterval(async () => {
-        console.log(IMG_GEN_URL);
-        const response = await fetch(IMG_GEN_URL);
-        food[count].img = await response.url;  
-        count += 1;
-        if (count >= food.length)
-            count = 0;    
-    }, 10000);
-    
-    
+   let food = [];
+
     const CSRF_TOKEN = Cookies.get('csrftoken');
     const WISHLIST_URL = getRef("wishlist-ref");
-    
-    onInterval(async () => {
-        const response = await fetch(WISHLIST_URL, {
-                                             headers: {
-                                                'Content-Type': 'application/json',
-                                                'Accept': 'application/json, text-plain, */*',
-                                                'X-Requested-With': 'XMLHttpRequest',
-                                                'X-CSRFToken': CSRF_TOKEN
-                                             },
-                                             method: 'POST',
-                                             credentials: 'same-origin',
-                                             body: JSON.stringify({})
-                                     });
-        console.log(await response.text());    
-    
-        }, 1000);
-    
-    
 
-    
-    
+    function getRef(id) {return document.getElementById(id).href;};
 
-   
-    //onMount(async () => {
-    //    const response = await fetch(IMG_GEN_URL);
-    //    food[0].img = await response.url;    
-   // });
+    onMount(async () => {
+       const response = await fetch(WISHLIST_URL, {
+                                     headers: {
+                                        'Accept': 'application/json, text-plain, */*',
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                     }, });
 
+       let food_json = await response.json();
+        food = food_json['food']
+        food = food
+       console.log(food)
+   });
 
-	    
 </script>
 
 <main>
