@@ -110,8 +110,6 @@ class WishlistView(View):
         product_query = Product.objects.all().values()
         print(product_query)
 
-        food = list(product_query)
-
         if not request.is_ajax():
             return render(request, 'shop/wishlist.html', {'phone_number': PHONE_NUMBER})
         else:
